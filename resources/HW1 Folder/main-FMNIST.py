@@ -27,8 +27,6 @@ model.compile(loss = "sparse_categorical_crossentropy",
               optimizer = "adam",
               metrics = ["accuracy"])
 
-es = keras.callbacks.EarlyStopping(monitor='val_loss', patience = 30, restore_best_weights=(True))
-
 history = model.fit(train_images, train_labels, batch_size = 32, epochs=100, 
           validation_data=(validation_images, validation_labels), use_multiprocessing=(True))
 
