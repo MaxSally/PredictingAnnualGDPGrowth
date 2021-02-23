@@ -10,10 +10,10 @@ temp = temp /255.0
 train_images, validation_images = images[5000:] / 255.0, images[:5000] / 255.0
 train_labels, validation_labels = labels[5000:], labels[:5000]
 
-model = tf.keras.models.Sequential([
+invertedTriangle = tf.keras.models.Sequential([
     keras.layers.Flatten(input_shape=(28, 28, 1)),
     
-    keras.layers.Dense(300, activation="relu"),    # Change the 500 based on the shape you want
+    keras.layers.Dense(300, activation="relu"), 
     keras.layers.Dropout(rate=0.5),
     keras.layers.Dense(200, activation="relu"),
     keras.layers.Dropout(rate=0.5),
@@ -23,6 +23,33 @@ model = tf.keras.models.Sequential([
     keras.layers.Dense(10, activation="softmax"),
     ])
 
+rectangle = tf.keras.models.Sequential([
+    keras.layers.Flatten(input_shape=(28, 28, 1)),
+    
+    keras.layers.Dense(200, activation="relu"),    
+    keras.layers.Dropout(rate=0.5),
+    keras.layers.Dense(200, activation="relu"),
+    keras.layers.Dropout(rate=0.5),
+    keras.layers.Dense(200, activation="relu"),
+    keras.layers.Dropout(rate=0.5),
+    
+    keras.layers.Dense(10, activation="softmax"),
+    ])
+
+hexagon = tf.keras.models.Sequential([
+    keras.layers.Flatten(input_shape=(28, 28, 1)),
+    
+    keras.layers.Dense(175, activation="relu"),    
+    keras.layers.Dropout(rate=0.5),
+    keras.layers.Dense(300, activation="relu"),
+    keras.layers.Dropout(rate=0.5),
+    keras.layers.Dense(175, activation="relu"),
+    keras.layers.Dropout(rate=0.5),
+    
+    keras.layers.Dense(10, activation="softmax"),
+    ])
+
+model = invertedTriangle # Change based on the model you want to test
 model.compile(loss = "sparse_categorical_crossentropy", 
               optimizer = "adam",
               metrics = ["accuracy"])
