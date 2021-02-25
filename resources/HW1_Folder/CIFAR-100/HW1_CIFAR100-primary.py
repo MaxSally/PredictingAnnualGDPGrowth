@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[2]:
 
 
 # We'll start with our library imports...
@@ -25,7 +25,7 @@ from keras import backend
 from tensorflow.python.keras import regularizers
 
 
-# In[14]:
+# In[3]:
 
 
 (images, labels), (temp, temp1) = cifar100.load_data()
@@ -33,10 +33,20 @@ train_images, validation_images = images[:40000], images[40000:]
 train_labels, validation_labels = labels[:40000], labels[40000:]
 
 
-# In[15]:
+# In[4]:
 
 
 img_rows, img_cols, img_width = 32, 32, 3
+  
+# if k.image_data_format() == 'channels_first': 
+#    train_images = train_images.reshape(train_images.shape[0], 1, img_rows, img_cols, img_width) 
+#    validation_images = validation_images.reshape(validation_images.shape[0], 1, img_rows, img_cols, img_width) 
+#    inpx = (img_rows, img_cols, img_width)
+  
+# else: 
+#    train_images = train_images.reshape(train_images.shape[0], img_rows, img_cols, img_width) 
+#    validation_images = validation_images.reshape(validation_images.shape[0], img_rows, img_cols, img_width) 
+#    inpx = (img_rows, img_cols, img_width) 
   
 train_images = train_images.astype('float32') 
 validation_images = validation_images.astype('float32') 
@@ -46,67 +56,23 @@ validation_images /= 255
 temp /= 255
 
 
-# In[16]:
+# In[5]:
 
 
 train_labels = keras.utils.to_categorical(train_labels)
 print(train_labels.shape)
 validation_labels_save = validation_labels
 validation_labels = keras.utils.to_categorical(validation_labels)
+temp1 = keras.utils.to_categorical(temp1)
 
 
-# In[9]:
+# In[6]:
 
 
 input_shape = (img_rows, img_cols, img_width)
 
 
-# In[10]:
-
-
-class ResBlock(keras.layers.Layer):
-
-    def __init__(self, filter_num, stride=1):
-        super().__init__()
-        self.stride = stride
-
-        # Both self.conv1 and self.down_conv layers downsample the input when stride != 1
-        self.bn1 = tf.keras.layers.BatchNormalization()
-        self.conv1 = tf.keras.layers.Conv2D(filters=filter_num,
-                                            kernel_size=(3, 3),
-                                            strides=stride,
-                                            padding="same")
-        self.bn2 = tf.keras.layers.BatchNormalization()
-        self.conv2 = tf.keras.layers.Conv2D(filters=filter_num,
-                                            kernel_size=(3, 3),
-                                            padding="same")
-
-        if self.stride != 1:
-            self.down_conv = tf.keras.layers.Conv2D(filters=filter_num,
-                                                    kernel_size=(1, 1),
-                                                    strides=stride,
-                                                    padding="same")
-            self.down_bn = tf.keras.layers.BatchNormalization()
-
-    def __call__(self, x, is_training = True):
-        identity = x
-        if self.stride != 1:
-            identity = self.down_conv(identity)
-            identity = self.down_bn(identity, training=is_training)
-
-        x = self.bn1(x, training=is_training)
-        x = tf.nn.relu(x)
-        x = self.conv1(x)
-        
-        
-        x = self.bn2(x, training=is_training)
-        x = tf.nn.relu(x)
-        x = self.conv2(x)
-
-        return x + identity
-
-
-# In[25]:
+# In[7]:
 
 
 EXPANSION_FACTOR = 4
@@ -156,7 +122,7 @@ class Bottleneck(keras.layers.Layer):
         return x + identity
 
 
-# In[26]:
+# In[8]:
 
 
 model = keras.models.Sequential()
@@ -166,21 +132,17 @@ model.add(keras.layers.BatchNormalization())
 model.add(keras.layers.Activation("relu"))
 model.add(keras.layers.MaxPool2D(pool_size=3, strides=2, padding="SAME"))
 prev_filters = 64
-is_training = True
-x = DefaultConv2D(64, kernel_size=7, strides=2,
-input_shape=input_shape)
-for filters in [64] * 3 + [64] * 4 + [128] * 6 + [256] * 3:
+for filters in [64] * 3 + [128] * 4 + [256] * 6 + [512] * 3:
     strides = 1 if filters == prev_filters else 2
     model.add(Bottleneck(filters, stride=strides))
     prev_filters = filters
-model.add(x)
 model.add(keras.layers.GlobalAvgPool2D())
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(100, activation="softmax"))
 model.summary()
 
 
-# In[27]:
+# In[9]:
 
 
 # using Sequential groups all the layers to run at once
@@ -191,19 +153,19 @@ es = keras.callbacks.EarlyStopping(monitor='val_loss', patience = 30)
 history = model.fit(train_images, train_labels, batch_size = 32, epochs=500, validation_data=(validation_images, validation_labels), callbacks = [es], shuffle=True, use_multiprocessing=(True))
 
 
-# In[40]:
+# In[10]:
 
 
 validation_evaluation = model.evaluate(validation_images, validation_labels)
 
 
-# In[31]:
+# In[11]:
 
 
 model.evaluate(temp, temp1)
 
 
-# In[32]:
+# In[12]:
 
 
 plt.plot(history.history['accuracy'])
@@ -215,7 +177,7 @@ plt.legend(['train', 'val'], loc='upper left')
 plt.show()
 
 
-# In[33]:
+# In[13]:
 
 
 plt.plot(history.history['loss'])
@@ -227,13 +189,13 @@ plt.legend(['train', 'val'], loc='upper left')
 plt.show()
 
 
-# In[34]:
+# In[14]:
 
 
 y_predict = model.predict(validation_images)
 
 
-# In[35]:
+# In[15]:
 
 
 y_prediction_bin = np.array([])
@@ -251,20 +213,20 @@ y_prediction_bin = y_prediction_bin.astype(int)
 print(y_prediction_bin) 
 
 
-# In[37]:
+# In[16]:
 
 
 confusion_matrix = tf.math.confusion_matrix(validation_labels_save, y_prediction_bin)
 print(confusion_matrix)
 
 
-# In[38]:
+# In[17]:
 
 
 np.savetxt("HW1_model2_confusion_matrix.txt", confusion_matrix.numpy(), fmt='%03.d')
 
 
-# In[42]:
+# In[18]:
 
 
 from math import sqrt
