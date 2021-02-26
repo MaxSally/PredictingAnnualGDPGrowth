@@ -44,11 +44,14 @@ def confidence_interval(validation_evaluation, validation_size):
     validation_data_error = 1 - validation_evaluation[1]
     print(validation_data_error)
 
-    lower_bound_interval = validation_data_error - 1.96 * sqrt(
+    lower_bound_interval = validation_evaluation[1] - 1.96 * sqrt(
         (validation_data_error * (1 - validation_data_error)) / validation_size)
-    upper_bound_interval = validation_data_error + 1.96 * sqrt(
+    upper_bound_interval = validation_evaluation[1] + 1.96 * sqrt(
         (validation_data_error * (1 - validation_data_error)) / validation_size)
     return (lower_bound_interval, upper_bound_interval)
+
+
+
 
 def print_accuracy_graph(history):
     plt.plot(history.history['accuracy'])
