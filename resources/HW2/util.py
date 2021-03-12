@@ -3,7 +3,8 @@ import tensorflow as tf            # to specify and run computation graphs
 import tensorflow_datasets as tfds # to load training data
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-
+import matplotlib.pyplot as plt
+from math import sqrt
 
 def get_train_data():
     train_data, test_data = tfds.load(
@@ -55,15 +56,9 @@ def get_padded_train_text(train_text, maxlen = 250):
 
 def print_confusion_matrix(validation_labels, y_predict):
     y_prediction_bin = np.array([])
-    for example in y_predict:
-        maxN = example[0]
-        ind = 0
-        for i in range(1, 100):
-            if example[i] > maxN:
-                ind = i
-                maxN = example[i]
-        y_prediction_bin = np.append(y_prediction_bin, ind)
-
+    for i in range(len(y_predict)):
+        temp = 1 if y_predict[i][0] >= 0.5 else 0
+        y_prediction_bin = np.append(y_prediction_bin, temp)
     y_prediction_bin = y_prediction_bin.astype(int)
     confusion_matrix = tf.math.confusion_matrix(validation_labels, y_prediction_bin)
     np.savetxt("HW1_model1_confusion_matrix.txt", confusion_matrix.numpy(), fmt='%03.d')

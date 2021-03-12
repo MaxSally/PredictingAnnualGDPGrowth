@@ -7,7 +7,7 @@ from tensorflow.keras.layers import LSTM, Bidirectional, Embedding, GlobalMaxPoo
 from keras.layers import *
 from util import *
 
-class AttentionWithContext(tf.keras.layers.Layer):
+class Attention(tf.keras.layers.Layer):
     """
     Reference [https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf]
     Also https://www.kaggle.com/amanbhalla/imdb-review-lstm-with-attention

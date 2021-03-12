@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt  # to visualize data and draw plots
 from math import sqrt
 
+
 def load_data():
     (images, labels), (temp, temp1) = cifar100.load_data()
     train_images, validation_images = images[:40000], images[40000:]
