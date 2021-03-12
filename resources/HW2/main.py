@@ -3,8 +3,8 @@ import numpy as np                 # to use numpy arrays
 import tensorflow as tf            # to specify and run computation graphs
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 
-from resources.HW2.util import *
-from resources.HW2.model import *
+from util import *
+from model import *
 
 train_text, train_label = get_train_data()
 

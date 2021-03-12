@@ -5,7 +5,7 @@ from tensorflow.keras import Model, initializers, regularizers, constraints
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Bidirectional, Embedding, GlobalMaxPooling1D, Dense, Flatten, Conv2D, MaxPooling2D, MaxPool2D, Dropout, GlobalAvgPool2D, Input
 from keras.layers import *
-from resources.HW2.util import *
+from util import *
 
 class AttentionWithContext(tf.keras.layers.Layer):
     """
@@ -92,6 +92,21 @@ def getModel3(input_length, vocab_size=60000):
     model.add(Embedding(input_dim=vocab_size, output_dim=20, input_length=input_length))
     model.add(Dropout(0.4))
     model.add(Bidirectional(LSTM(200, return_sequences=True)))
+    model.add(Dropout(0.3))
+    model.add(AttentionWithContext())
+    model.add(Dropout(0.5))
+    model.add(Dense(512))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Dense(1, activation='sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.summary()
+    return model
+
+def getModel4(input_length, vocab_size=60000):
+    model = Sequential()
+    model.add(Embedding(input_dim=vocab_size, output_dim=20, input_length=input_length))
+    model.add(Dropout(0.4))
+    model.add(Bidirectional(LSTM(300, return_sequences=True)))
     model.add(Dropout(0.3))
     model.add(AttentionWithContext())
     model.add(Dropout(0.5))
