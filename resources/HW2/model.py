@@ -106,7 +106,7 @@ def getModel4(input_length, vocab_size=60000):
     model = Sequential()
     model.add(Embedding(input_dim=vocab_size, output_dim=20, input_length=input_length))
     model.add(Dropout(0.4))
-    model.add(Bidirectional(LSTM(50, return_sequences=True)))
+    model.add(LSTM(50, return_sequences=True))
     model.add(LSTM(100, return_sequences=True))
     model.add(LSTM(50, return_sequences=True))
     model.add(Dropout(0.3))
