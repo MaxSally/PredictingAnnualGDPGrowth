@@ -31,16 +31,9 @@ def get_padded_train_text(train_text, maxlen = 250):
             print(cnt//1000)
         cnt += 1
         tokenizer.fit_on_texts(str(it))
-    cnt = 0
-    tokenized_word_list = []
-    for it in train_text:
-        if cnt % 1000 == 0:
-            print(len(tokenized_word_list))
-        cnt += 1
-        tokenized_word_list.append(tokenizer.texts_to_sequences(str(it)))
 
     #The shape of the tokenized_word_list is [, , ,]. This transforms it to [,]
-    tokenized_word_list_2 = []
+    tokenized_word_list = []
     for it in train_text:
         temp = tokenizer.texts_to_sequences(str(it))
         newL = []
@@ -48,9 +41,9 @@ def get_padded_train_text(train_text, maxlen = 250):
             if it2 == []:
                 continue
             newL.append(it2[0])
-        tokenized_word_list_2.append(newL)
+        tokenized_word_list.append(newL)
 
-    text_train_padded = pad_sequences(tokenized_word_list_2, maxlen=maxlen, padding='post')
+    text_train_padded = pad_sequences(tokenized_word_list, maxlen=maxlen, padding='post')
     return text_train_padded
 
 
