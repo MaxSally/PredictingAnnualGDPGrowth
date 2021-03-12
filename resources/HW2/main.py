@@ -13,7 +13,7 @@ maxlen = 250
 encode_dim = 70
 batch_size = 32
 
-train_text_padded = get_padded_train_text(train_text, maxlen)
+train_text_padded = get_padded_train_text_fromfile(maxlen)
 
 es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=5)
 mc = ModelCheckpoint('model_best.h5', monitor='val_acc', mode='max', verbose=1, save_best_only=True)
@@ -28,7 +28,7 @@ final_validation_text = np.array(final_validation_text)
 final_train_label = np.array(final_train_label)
 final_validation_label = np.array(final_validation_label)
 
-history = train_model.fit(final_train_text, final_train_label, epochs=1, batch_size=batch_size, verbose=1, validation_data=(final_validation_text, final_validation_label), callbacks=[es])
+history = train_model.fit(final_train_text, final_train_label, epochs=50, batch_size=batch_size, verbose=1, validation_data=(final_validation_text, final_validation_label), callbacks=[es])
 
 saveModel(train_model, 'homework2/imdb')
 

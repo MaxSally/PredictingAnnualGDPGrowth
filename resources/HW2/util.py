@@ -1,10 +1,11 @@
-import numpy as np                 # to use numpy arrays
-import tensorflow as tf            # to specify and run computation graphs
-import tensorflow_datasets as tfds # to load training data
+import numpy as np  # to use numpy arrays
+import tensorflow as tf  # to specify and run computation graphs
+import tensorflow_datasets as tfds  # to load training data
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import matplotlib.pyplot as plt
 from math import sqrt
+
 
 def get_train_data():
     train_data, test_data = tfds.load(
@@ -22,17 +23,26 @@ def get_train_data():
 def dot_product(x, kernel):
     return tf.tensordot(x, kernel, axes=1)
 
-def get_padded_train_text(train_text, maxlen = 250):
+
+def get_padded_train_text_fromfile(maxlen):
+    tokenized_word_list = []
+    with open('token_word_list.npy', 'rb') as f:
+        tokenized_word_list = np.load(f, allow_pickle=True)
+    text_train_padded = pad_sequences(tokenized_word_list, maxlen=maxlen, padding='post')
+    return text_train_padded
+
+
+def get_padded_train_text(train_text, maxlen=250):
     tokenizer = Tokenizer()
     cnt = 0
     for it in train_text:
         if cnt % 1000 == 0:
             print(str(it))
-            print(cnt//1000)
+            print(cnt // 1000)
         cnt += 1
         tokenizer.fit_on_texts(str(it))
 
-    #The shape of the tokenized_word_list is [, , ,]. This transforms it to [,]
+    # The shape of the tokenized_word_list is [, , ,]. This transforms it to [,]
     tokenized_word_list = []
     for it in train_text:
         temp = tokenizer.texts_to_sequences(str(it))
@@ -57,6 +67,7 @@ def print_confusion_matrix(validation_labels, y_predict):
     np.savetxt("HW1_model1_confusion_matrix.txt", confusion_matrix.numpy(), fmt='%03.d')
     return confusion_matrix
 
+
 def confidence_interval(validation_evaluation, validation_size):
     validation_data_error = 1 - validation_evaluation[1]
     print(validation_data_error)
@@ -67,6 +78,7 @@ def confidence_interval(validation_evaluation, validation_size):
         (validation_data_error * (1 - validation_data_error)) / validation_size)
     return (lower_bound_interval, upper_bound_interval)
 
+
 def print_accuracy_graph(history):
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
@@ -75,6 +87,7 @@ def print_accuracy_graph(history):
     plt.xlabel('epoch')
     plt.legend(['train', 'val'], loc='upper left')
     plt.show()
+
 
 def print_loss_graph(history):
     plt.plot(history.history['loss'])

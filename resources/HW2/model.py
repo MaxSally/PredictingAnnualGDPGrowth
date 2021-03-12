@@ -33,7 +33,7 @@ class Attention(tf.keras.layers.Layer):
         self.b_constraint = constraints.get(b_constraint)
 
         self.bias = bias
-        super(AttentionWithContext, self).__init__(**kwargs)
+        super(Attention, self).__init__(**kwargs)
 
     def build(self, input_shape):
         assert len(input_shape) == 3
@@ -55,7 +55,7 @@ class Attention(tf.keras.layers.Layer):
                                  regularizer=self.u_regularizer,
                                  constraint=self.u_constraint)
 
-        super(AttentionWithContext, self).build(input_shape)
+        super(Attention, self).build(input_shape)
 
     def compute_mask(self, input, input_mask=None):
         return None
@@ -91,9 +91,9 @@ def getModel3(input_length, vocab_size=60000):
     model = Sequential()
     model.add(Embedding(input_dim=vocab_size, output_dim=20, input_length=input_length))
     model.add(Dropout(0.4))
-    model.add(Bidirectional(LSTM(200, return_sequences=True)))
+    model.add(LSTM(200, return_sequences=True))
     model.add(Dropout(0.3))
-    model.add(AttentionWithContext())
+    model.add(Attention())
     model.add(Dropout(0.5))
     model.add(Dense(512))
     model.add(LeakyReLU(alpha=0.2))
@@ -110,7 +110,7 @@ def getModel4(input_length, vocab_size=60000):
     model.add(LSTM(100, return_sequences=True))
     model.add(LSTM(50, return_sequences=True))
     model.add(Dropout(0.3))
-    model.add(AttentionWithContext())
+    model.add(Attention())
     model.add(Dropout(0.5))
     model.add(Dense(512))
     model.add(LeakyReLU(alpha=0.2))
