@@ -1,6 +1,6 @@
 from __future__ import print_function, division
 
-from keras.layers import Input, Dense, Reshape, Flatten
+from keras.layers import Input, Dense, Reshape, Flatten, Dropout
 from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Sequential, Model
 from keras.optimizers import Adam
@@ -52,14 +52,17 @@ class GAN():
 
         model = Sequential()
 
-        model.add(Dense(1000, input_shape=noise_shape))
+        model.add(Dense(100, input_shape=noise_shape))
         model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.3))
 
-        model.add(Dense(2000))
+        model.add(Dense(200))
         model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.3))
 
-        model.add(Dense(1000))
+        model.add(Dense(100))
         model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.3))
 
         model.add(Dense(self.input_shape * self.channels, activation = "sigmoid"))
         model.add(Reshape([self.img_rows, self.img_cols, self.channels]))
@@ -76,15 +79,18 @@ class GAN():
         model = Sequential()
         model.add(Flatten(input_shape=img_shape))
 
-        model.add(Dense(1000))
+        model.add(Dense(100))
         model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.3))
 
-        model.add(Dense(2000))
+        model.add(Dense(200))
         model.add(LeakyReLU(0.2))
+        model.add(Dropout(0.3))
 
-        model.add(Dense(1000))
+        model.add(Dense(100))
         model.add(LeakyReLU(0.2))
-
+        model.add(Dropout(0.3))
+        
         model.add(Dense(1, activation='sigmoid'))
         model.summary()
 
@@ -98,8 +104,8 @@ class GAN():
         mean = 0
         var = 0.1
         sigma = var**0.5
-        gauss = np.random.normal(mean, sigma, (row, col,ch))
-        gauss = gauss.reshape(row, col,ch)
+        gauss = np.random.normal(mean, sigma, (row, col, ch))
+        gauss = gauss.reshape(row, col, ch)
         noisy = image + gauss
         image = tf.image.resize(noisy, (row, col))
         return image
