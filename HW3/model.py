@@ -98,8 +98,8 @@ class GAN():
         mean = 0
         var = 0.1
         sigma = var**0.5
-        gauss = np.random.normal(mean ,sigma ,(row ,col ,ch))
-        gauss = gauss.reshape(row ,col ,ch)
+        gauss = np.random.normal(mean, sigma, (row, col,ch))
+        gauss = gauss.reshape(row, col,ch)
         noisy = image + gauss
         image = tf.image.resize(noisy, (row, col))
         return image
@@ -107,7 +107,7 @@ class GAN():
     def train(self, epochs, batch_size=128, save_interval=50):
         # Please change to where you dataset is!
         data_dir = "img_align_celeba"
-        filepaths =os.listdir(data_dir)
+        filepaths = os.listdir(data_dir)
         half_batch = int(batch_size / 2)
         # Lists to log the losses of discriminator real, discriminator fake, and generator.
         d_loss_logs_r = []
@@ -160,7 +160,7 @@ class GAN():
                 # If the iteration is at the save intervals, save the generated images.
                 # A way to make sure things are running fine
                 if ite % save_interval == 0:
-                    save_imgs(self.generator, self.row, self.col, epoch,ite)
+                    save_imgs(self.generator, self.img_row, self.img_col, epoch,ite)
                     plt.plot(d_loss_logs_r_a[:, 0], d_loss_logs_r_a[:, 1], label="Discriminator Loss - Real")
                     plt.plot(d_loss_logs_f_a[:, 0], d_loss_logs_f_a[:, 1], label="Discriminator Loss - Fake")
                     plt.plot(g_loss_logs_a[:, 0], g_loss_logs_a[:, 1], label="Generator Loss")
@@ -171,11 +171,11 @@ class GAN():
                     plt.grid(True)
                     plt.show()
 
-    def saveGeneratorWeights(self):
+    def saveGeneratorWeights(self, epoch):
         self.generator.save_weights("model" + str(epoch) + ".h5")
         print("Saved model to disk")
 
-    def saveGeneratorInJson(self):
+    def saveGeneratorInJson(self, epoch):
         model_json = self.generator.to_json()
         with open("model" + str(epoch) + ".json", "w") as json_file:
             json_file.write(model_json)
