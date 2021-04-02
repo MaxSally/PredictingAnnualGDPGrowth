@@ -98,7 +98,7 @@ class GAN():
         validity = model(img)
         return Model(img, validity)
 
-    def add_noise(self ,image):
+    def add_noise(self, image):
         ch = self.channels
         row ,col = self.img_rows, self.img_cols
         mean = 0
@@ -119,19 +119,18 @@ class GAN():
         d_loss_logs_r = []
         d_loss_logs_f = []
         g_loss_logs = []
-        n_iterations = math.floor(len(filepaths ) /batch_size)
-        print(n_iterations)
+        n_iterations = math.floor(len(filepaths)/batch_size)
+        print("Start training: ", n_iterations)
         for epoch in range(epochs):
             # ---------------------
             #  Train Discriminator
             # ---------------------
-
             for ite in range(n_iterations):
                 # Select a random half batch of images
-                X_train = get_batch(glob(os.path.join(data_dir, '*.jpg'))[ite*batch_size:(ite +1 ) *batch_size], self.img_cols, self.img_rows, 'RGB')
+                X_train = get_batch(glob(os.path.join(data_dir, '*.jpg'))[ite*batch_size:(ite +1)*batch_size], self.img_cols, self.img_rows, 'RGB')
                 # Normalize train_data to be between -1 and 1 (similar to /255)
                 X_train = (X_train.astype(np.float32) - 127.5) / 127.5
-                X_train =np.array([self.add_noise(image) for image in X_train])
+                X_train =np.array([self.add_noise(image).numpy() for image in X_train])
                 idx = np.random.randint(0, X_train.shape[0], half_batch)
                 imgs = X_train[idx]
                 noise = np.random.normal(0, 1, (half_batch, self.input_shape))
@@ -166,7 +165,7 @@ class GAN():
                 # If the iteration is at the save intervals, save the generated images.
                 # A way to make sure things are running fine
                 if ite % save_interval == 0:
-                    save_imgs(self.generator, self.img_row, self.img_col, epoch,ite)
+                    save_imgs(self.generator, self.img_rows, self.img_cols, epoch,ite)
                     plt.plot(d_loss_logs_r_a[:, 0], d_loss_logs_r_a[:, 1], label="Discriminator Loss - Real")
                     plt.plot(d_loss_logs_f_a[:, 0], d_loss_logs_f_a[:, 1], label="Discriminator Loss - Fake")
                     plt.plot(g_loss_logs_a[:, 0], g_loss_logs_a[:, 1], label="Generator Loss")
