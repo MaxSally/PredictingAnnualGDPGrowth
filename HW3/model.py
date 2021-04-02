@@ -119,7 +119,8 @@ class GAN():
         d_loss_logs_r = []
         d_loss_logs_f = []
         g_loss_logs = []
-        n_iterations = math.floor(len(filepaths)/batch_size)
+        #n_iterations = math.floor(len(filepaths)/batch_size)
+        n_iterations = 200
         print("Start training: ", n_iterations)
         for epoch in range(epochs):
             # ---------------------
