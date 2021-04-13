@@ -1,17 +1,20 @@
-Long term variable,MAE
-Capital_Investment_test,1.11
-Labor_Force_Participation_test,1.44
-Fixed_Broadband_test,1.53
-RandD_test,1.1400000000000001
-Property_Rights_test,1.15
-Freedom_From_Corruption_test,1.16
-Fiscal_Freedom_test,1.11
-Business_Freedom_test,1.11
-Labor_Freedom_test,1.11
-Monetary_Freedom_test,1.32
-Trade_Freedom_test,1.28
-Investment_Freedom_test,1.35
-Financial_Freedom_test,1.16
-Economic_Freedom_Overall_test,1.17
-Pop_Above_65_test,1.11
-Savings_As_GDP_test,1.17
+Long term variable,MAE,
+Capital_Investment_test,1.11,
+Labor_Force_Participation_test,1.44,
+Fixed_Broadband_test,1.53,
+RandD_test,1.14,
+Property_Rights_test,1.15,
+Freedom_From_Corruption_test,1.16,
+Fiscal_Freedom_test,1.11,
+Business_Freedom_test,1.11,
+Labor_Freedom_test,1.11,
+Monetary_Freedom_test,1.32,
+Trade_Freedom_test,1.28,
+Investment_Freedom_test,1.35,
+Financial_Freedom_test,1.16,
+Economic_Freedom_Overall_test,1.17,
+Pop_Above_65_test,1.11,
+Savings_As_GDP_test,1.17,
+,0.064308402,
+,,
+95% Confidence,1.149441598,1.278058402
