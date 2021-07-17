@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from math import sqrt
 
 
-def get_train_data():
+def get_train_data():#gets the training data from IMDB data set
     train_data, test_data = tfds.load(
         name="imdb_reviews",
         split=('train', 'test'),
@@ -24,7 +24,7 @@ def dot_product(x, kernel):
     return tf.tensordot(x, kernel, axes=1)
 
 
-def get_padded_train_text_fromfile(maxlen):
+def get_padded_train_text_fromfile(maxlen):#loads the text file if tokenized already ran
     tokenized_word_list = []
     with open('token_word_list.npy', 'rb') as f:
         tokenized_word_list = np.load(f, allow_pickle=True)
@@ -32,7 +32,7 @@ def get_padded_train_text_fromfile(maxlen):
     return text_train_padded
 
 
-def get_padded_train_text(train_text, maxlen=250):
+def get_padded_train_text(train_text, maxlen=250):#tokenizes the data
     tokenizer = Tokenizer()
     cnt = 0
     for it in train_text:
@@ -57,7 +57,7 @@ def get_padded_train_text(train_text, maxlen=250):
     return text_train_padded
 
 
-def print_confusion_matrix(validation_labels, y_predict):
+def print_confusion_matrix(validation_labels, y_predict):#prints the confusion matrix
     y_prediction_bin = np.array([])
     for i in range(len(y_predict)):
         temp = 1 if y_predict[i][0] >= 0.5 else 0
@@ -68,7 +68,7 @@ def print_confusion_matrix(validation_labels, y_predict):
     return confusion_matrix
 
 
-def confidence_interval(validation_evaluation, validation_size):
+def confidence_interval(validation_evaluation, validation_size): #calculates the confidence interval
     validation_data_error = 1 - validation_evaluation[1]
     print(validation_data_error)
 
@@ -79,7 +79,7 @@ def confidence_interval(validation_evaluation, validation_size):
     return (lower_bound_interval, upper_bound_interval)
 
 
-def print_accuracy_graph(history):
+def print_accuracy_graph(history): #creates the graphs for accuracy
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.title('model accuracy')
@@ -89,7 +89,7 @@ def print_accuracy_graph(history):
     plt.show()
 
 
-def print_loss_graph(history):
+def print_loss_graph(history):#creates the graphs for loss
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('model loss')
