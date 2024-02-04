@@ -1,4 +1,6 @@
-# EconomicSpecialistGroup
+# Predicting annual GDP growth
+
+EconomicSpecialistGroup
 
 This project is a project for class CSCE 479 at University of Nebraska at Lincoln. 
 
